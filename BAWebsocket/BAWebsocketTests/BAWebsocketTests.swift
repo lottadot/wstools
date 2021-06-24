@@ -34,6 +34,11 @@ class BAWebsocketTests: XCTestCase {
 		socket.delegate = mockDelegate
 		socket.connect()
 
+		socket.onEvent = { [self] event in
+			print("NOTE: Received event via closure NOT delegate. Delegate is\(nil != socket.delegate ? " NOT" : "") nil.")
+			self.mockDelegate.didReceive(event: event, client: socket)
+		}
+
 		wait(for: [expectation], timeout: 5)
 		mockDelegate.validateExpectation(with: WebSocketDelegateExpectation.connected.rawValue)
     }
